@@ -8,61 +8,62 @@ db = SQLAlchemy()
 
 class User(db.Model):
     __tablename__ = "users"
-    user_id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
     email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean(), nullable=False)
-    favoritos: Mapped[List["Favorito"]] = relationship(
-        back_populates="User"
+    favorites: Mapped[List["Favorite"]] = relationship(
+        back_populates="user"
     )
     
 
 
-class Planeta(db.Model):
-    __tablename__ = "planetas"
-    planeta_id: Mapped[int] = mapped_column(primary_key=True)
+class Planet(db.Model):
+    __tablename__ = "planets"
+    id: Mapped[int] = mapped_column(primary_key=True)
     planet_name: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
     film_appearance: Mapped[str] = mapped_column(String(120), nullable=False)
     exploted: Mapped[bool] = mapped_column(Boolean(), nullable=False)
     population: Mapped[int] = mapped_column(Integer(), nullable=False)
-    personaje_id:Mapped[int] = mapped_column(ForeignKey("personajes.personaje_id"), nullable=True)    
-    personaje: Mapped[List["Personaje"]] = relationship(
-        back_populates="planetas",
+    people_id:Mapped[int] = mapped_column(ForeignKey("peoples.id"), nullable=True)    
+    people: Mapped[List["People"]] = relationship(
+        back_populates="planets",
     )
-    favoritos: Mapped[List["Favorito"]] = relationship(
-        back_populates="planetas",
+    favorites: Mapped[List["Favorite"]] = relationship(
+        back_populates="planets",
     )
 
-class Personaje(db.Model):
-    __tablename__ = "personajes"
-    personaje_id: Mapped[int] = mapped_column(primary_key=True)
+class People(db.Model):
+    __tablename__ = "peoples"
+    id: Mapped[int] = mapped_column(primary_key=True)
     person_name: Mapped[str] = mapped_column(
         String(120), unique=True, nullable=False)
     coalition: Mapped[str] = mapped_column(String(120), nullable=False)
     race: Mapped[str] = mapped_column(String(120), nullable=False)
     age: Mapped[int] = mapped_column(nullable=False)
-    planeta: Mapped['Planeta'] = relationship(
-        back_populates="personaje",
+    Planet: Mapped['Planet'] = relationship(
+        back_populates="people",
     )
-    favoritos: Mapped[List["Favorito"]] = relationship(
-        back_populates="personaje",
+    favorites: Mapped[List["Favorite"]] = relationship(
+        back_populates="people",
     )
 
 
-class Favorito(db.Model):
-    __tablename__ = "favoritos"
+class Favorite(db.Model):
+    __tablename__ = "favorites"
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id:Mapped[int] = mapped_column(ForeignKey("users.user_id"), nullable=False)
-    planeta_id:Mapped[int] = mapped_column(ForeignKey("planetas.planeta_id"), nullable=True)
-    personaje_id:Mapped[int] = mapped_column(ForeignKey("personajes.personaje_id"), nullable=True)    
-    favorite: Mapped['User'] = relationship(
-        back_populates="favorito",
+    user_id:Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    planet_id:Mapped[int] = mapped_column(ForeignKey("planets.id"), nullable=True)
+    people_id:Mapped[int] = mapped_column(ForeignKey("peoples.id"), nullable=True)    
+    favorite_user: Mapped['User'] = relationship(
+        back_populates="favorite",
     )
-    favorite_person: Mapped['Personaje'] = relationship(
-        back_populates="favorito",
+    favorite_people: Mapped['People'] = relationship(
+        back_populates="favorite",
     )
-    favorite_planet: Mapped['Planeta'] = relationship(
-        back_populates="favorito",
+    favorite_planet: Mapped['Planet'] = relationship(
+        back_populates="favorite",
     )
 
 
