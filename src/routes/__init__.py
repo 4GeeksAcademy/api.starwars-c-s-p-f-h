@@ -1,0 +1,1 @@
+from .planets_route import planets_bp

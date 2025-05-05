@@ -8,7 +8,8 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db
+from models import db, Planet, People, Favorite, User
+from routes import planets_bp
 #from models import Person
 
 app = Flask(__name__)
@@ -30,6 +31,8 @@ setup_admin(app)
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
     return jsonify(error.to_dict()), error.status_code
+
+app.register_blueprint(course_bp)
 
 # generate sitemap with all your endpoints
 @app.route('/')
