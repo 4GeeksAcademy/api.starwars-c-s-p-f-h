@@ -9,6 +9,8 @@ from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
 from models import db
+from routes import users_bp, favorites_bp, planets_bp, people_bp
+
 #from models import Person
 
 app = Flask(__name__)
@@ -26,6 +28,11 @@ db.init_app(app)
 CORS(app)
 setup_admin(app)
 
+app.register_blueprint(users_bp)
+app.register_blueprint(planets_bp)
+app.register_blueprint(people_bp)
+app.register_blueprint(favorites_bp)
+
 # Handle/serialize errors like a JSON object
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
@@ -36,14 +43,8 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
-@app.route('/user', methods=['GET'])
-def handle_user():
 
-    response_body = {
-        "msg": "Hello, this is your GET /user response "
-    }
 
-    return jsonify(response_body), 200
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':

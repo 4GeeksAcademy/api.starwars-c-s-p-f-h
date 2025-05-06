@@ -1,5 +1,5 @@
 from.database import db
-from sqlalchemy import Integer, String, Boolean, ForeignKey
+from sqlalchemy import Integer, String, Boolean 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List, TYPE_CHECKING
 
@@ -14,8 +14,7 @@ class Planet(db.Model):
     film_appearance: Mapped[str] = mapped_column(String(120), nullable=False)
     exploted: Mapped[bool] = mapped_column(Boolean(), nullable=False)
     population: Mapped[int] = mapped_column(Integer(), nullable=False)
-    person_id:Mapped[int] = mapped_column(ForeignKey("people.id"), nullable=True)    
-    person: Mapped[List["People"]] = relationship(
+    people:Mapped[List["People"]] = relationship(
         back_populates="planets",
     )
     favorite: Mapped[List["Favorite"]] = relationship(
