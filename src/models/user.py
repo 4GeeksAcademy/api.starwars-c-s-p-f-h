@@ -18,3 +18,15 @@ class User(db.Model):
     favorite: Mapped[List["Favorite"]] = relationship(
         back_populates="user"
     )
+
+    def serialize(self):
+        return{
+        "id":self.id,
+        "name":self.name,
+        "email":self.email,
+        "is_active":self.is_active
+    }
+    def serialize_with_relations(self):
+         data = self.serialize()
+         data['favorites'] = [favorite.serialize() for favorite in self.favorite]
+         return data
